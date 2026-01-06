@@ -1,0 +1,17 @@
+make the directory eg :monorepo
+navigate to it
+
+use script to create the basic folder or create them manually also have to create package-json, below is the example of repo structure
+react-nest-monorepo/
+├─ apps/     ===================  Deployable applications (API, Web)
+├─ packages/  ==================   Shared code (types, configs, utils)
+├─ infra/    ====================== DB, Docker, CI, migrations, env
+├─ package.json  
+├─ docker-compose.yml
+├─ tsconfig.base.json
+
+once we are done with this, navigate to apps/
+then, run the command : npx @nestjs/cli new api --package-manager npm (to get the basic setup of nest)
+
+
+
