@@ -10,5 +10,10 @@
     "dev:api": "npm run start:dev --workspace=apps/api",
     "build": "npm run build --workspaces",
     "lint": "npm run lint --workspaces"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "pg": "^8.16.3",
+    "sequelize-typescript": "^2.1.6"
   }
 }
