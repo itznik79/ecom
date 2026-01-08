@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 
-export function createSequelizeConnection(config: {
+export function createSequelize(options: {
   host: string;
   port: number;
   username: string;
@@ -9,11 +9,11 @@ export function createSequelizeConnection(config: {
 }) {
   return new Sequelize({
     dialect: 'postgres',
-    host: config.host,
-    port: config.port,
-    username: config.username,
-    password: config.password,
-    database: config.database,
+    host: options.host,
+    port: options.port,
+    username: options.username,
+    password: options.password,
+    database: options.database,
     logging: false,
   });
 }
