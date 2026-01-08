@@ -20,6 +20,7 @@ console.log('DB_NAME:', process.env.DB_NAME);
 
   // connect database first
   await sequelize.authenticate();
+  // await sequelize.sync({ alter: true });
   console.log('Auth DB connected');
 
   // start server
