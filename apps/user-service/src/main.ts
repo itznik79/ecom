@@ -16,7 +16,7 @@ async function bootstrap() {
     port: Number(process.env.DB_PORT),
     username: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
-    database: process.env.DB_NAME!, // user_db
+    database: process.env.DB_NAME!,
   });
   winstonLogger.log(`Connecting to DB: ${process.env.DB_NAME}`);
   await sequelize.authenticate();
