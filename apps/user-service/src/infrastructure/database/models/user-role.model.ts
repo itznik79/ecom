@@ -7,7 +7,7 @@ import { IRole } from '../../../interfaces/role.interface';
   underscored: true,
 })
 export class Role extends Model<Role> implements IRole {
-  created_at?: Date | undefined;
+  created_at?: Date;
   @PrimaryKey
   @Column(DataType.UUID)
   declare id: string;
