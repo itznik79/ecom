@@ -1,16 +1,33 @@
-import {Table, Column, Model, DataType, PrimaryKey} from 'sequelize-typescript';
-import { IPermission } from '../../../interfaces/permission.interface';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  Default,
+} from 'sequelize-typescript';
+import { Optional } from 'sequelize';
+
+interface PermissionAttributes {
+  id: string;
+  key: string;
+  description?: string;
+}
+
+interface PermissionCreationAttributes
+  extends Optional<PermissionAttributes, 'id'> {}
 
 @Table({
   tableName: 'permissions',
   timestamps: false,
   underscored: true,
 })
-export class Permission
-  extends Model<Permission>
-  implements IPermission
-{
+export class Permission extends Model<
+  PermissionAttributes,
+  PermissionCreationAttributes
+> {
   @PrimaryKey
+  @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
   declare id: string;
 
@@ -19,8 +36,8 @@ export class Permission
     unique: true,
     allowNull: false,
   })
-  key: string;
+  declare key: string;
 
   @Column(DataType.STRING)
-  description?: string;
+  declare description?: string;
 }
