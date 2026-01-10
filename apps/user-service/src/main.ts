@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { createSequelizeConnection } from './infrastructure/database/sequelize';
 import { setupSwagger } from './infrastructure/swagger/swagger.setup';
 import { winstonLogger } from './infrastructure/database/logger/winston.logger';
+import { seedSuperAdmin } from "./infrastructure/seeders/super-admin.seeder";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -21,6 +22,15 @@ async function bootstrap() {
   winstonLogger.log(`Connecting to DB: ${process.env.DB_NAME}`);
   await sequelize.authenticate();
   winstonLogger.log('User DB connected');
+
+  if (process.env.RUN_SEEDERS === "true") {
+  winstonLogger.log("Running DB seeders...");
+
+  await seedSuperAdmin();
+
+  winstonLogger.log("Seeders completed successfully");
+}
+
   const port = Number(process.env.PORT) || 3002;
   await app.listen(port);
 
