@@ -4,8 +4,11 @@ import { AppModule } from './app.module';
 import { sequelize } from './infrastructure/database/sequelize';
 import { winstonLogger } from './infrastructure/logger/winston.logger';
 import { setupSwagger } from './infrastructure/swagger/swagger.setup';
+import { connectRedis } from "./config/redis.config";
 
 async function bootstrap() {
+    await connectRedis();
+  console.log("Auth service started");
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
