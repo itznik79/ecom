@@ -1,26 +1,17 @@
-import { JwtModule } from "@nestjs/jwt";
-import { PassportModule } from "@nestjs/passport";
-import {Module} from "@nestjs/common";
-import { FirebaseStrategy } from "./strategies/firebase.strategy";
-import { GoogleStrategy } from "./strategies/google.strategy";
-import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
-import { JwtStrategy } from "./strategies/jwt.strategy";
+import { Module } from "@nestjs/common";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { OtpService } from "../../infrastructure/services/otp.service";
+import { MailService } from "../../infrastructure/services/mail.service";
+import { PasswordService } from "../../infrastructure/services/password.service";
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({}),
-  ],
-//   controllers: [AuthController],
+  controllers: [AuthController], // 🔴 must
   providers: [
-    // AuthService,
-    // TokenService,
-    // OtpService,
-
-    JwtStrategy,
-    JwtRefreshStrategy,
-    GoogleStrategy,
-    FirebaseStrategy,
+    AuthService,
+    OtpService,
+    MailService,
+    PasswordService,
   ],
 })
 export class AuthModule {}

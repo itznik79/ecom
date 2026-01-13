@@ -57,4 +57,23 @@ export class OtpService {
     const key = this.buildKey(purpose, identifier);
     await redisClient.del(key);
   }
+
+  async allowPasswordReset(identifier: string) {
+  const key = `reset:allowed:${identifier}`;
+
+  await redisClient.set(key, "true", {
+    EX: 600, // 10 minutes
+  });
+}
+
+async isPasswordResetAllowed(identifier: string) {
+  const key = `reset:allowed:${identifier}`;
+  return !!(await redisClient.get(key));
+}
+
+async clearPasswordReset(identifier: string) {
+  const key = `reset:allowed:${identifier}`;
+  await redisClient.del(key);
+}
+
 }
