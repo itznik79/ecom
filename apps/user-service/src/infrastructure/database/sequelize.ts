@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Role } from './models/user-role.model';
+import { Role } from './models/role.model';
 import { Permission } from './models/permission.model';
 
 let sequelize: Sequelize | null = null;

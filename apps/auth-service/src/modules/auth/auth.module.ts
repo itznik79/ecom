@@ -4,8 +4,14 @@ import { AuthService } from "./auth.service";
 import { OtpService } from "../../infrastructure/services/otp.service";
 import { MailService } from "../../infrastructure/services/mail.service";
 import { PasswordService } from "../../infrastructure/services/password.service";
+import { PassportModule } from "@nestjs/passport";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
+  imports: [
+    PassportModule,
+    JwtModule.register({}),
+  ],
   controllers: [AuthController], // 🔴 must
   providers: [
     AuthService,
@@ -14,4 +20,4 @@ import { PasswordService } from "../../infrastructure/services/password.service"
     PasswordService,
   ],
 })
-export class AuthModule {}
+export class AuthModule { }

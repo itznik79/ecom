@@ -12,3 +12,8 @@ export const sequelize = new Sequelize({
   logging: false,
   models: [path.join(__dirname, '../../**/*.model.{ts,js}')],
 });
+
+sequelize
+  .sync({ alter: true })
+  .then(() => console.log('DB synced'))
+  .catch(err => console.error('DB sync error:', err));

@@ -5,6 +5,8 @@ import { sequelize } from './infrastructure/database/sequelize';
 import { winstonLogger } from './infrastructure/logger/winston.logger';
 import { setupSwagger } from './infrastructure/swagger/swagger.setup';
 import { connectRedis } from "./config/redis.config";
+import { ValidationPipe } from '@nestjs/common';
+
 
 async function bootstrap() {
     await connectRedis();
@@ -14,6 +16,16 @@ async function bootstrap() {
   });
   app.useLogger(winstonLogger);
   setupSwagger(app);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: false,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   winstonLogger.log(`Connecting to DB: ${process.env.DB_NAME}`);
   await sequelize.authenticate();
   winstonLogger.log('Auth DB connected');
