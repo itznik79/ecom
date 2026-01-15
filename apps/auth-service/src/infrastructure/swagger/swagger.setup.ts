@@ -11,7 +11,7 @@ export function setupSwagger(app: INestApplication) {
     .setDescription('Service API documentation')
     .setVersion('1.0')
     .addServer(
-      process.env.SWAGGER_BASE_URL || 'http://localhost:3000',
+      process.env.SWAGGER_BASE_URL || 'http://localhost:3001',
     )
     .addBearerAuth(
       {

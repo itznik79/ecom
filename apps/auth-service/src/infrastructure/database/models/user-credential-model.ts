@@ -1,4 +1,4 @@
-import {Table, Column, Model, DataType, PrimaryKey} from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey,Default } from 'sequelize-typescript';
 import { IUserCredential } from '../../../interfaces/user-credential.interface';
 import { AuthProviderType } from '../../../interfaces/enums/auth-provider.enum';
 
@@ -9,10 +9,13 @@ import { AuthProviderType } from '../../../interfaces/enums/auth-provider.enum';
 })
 export class UserCredential
   extends Model<UserCredential>
-  implements IUserCredential
-{
+  implements IUserCredential {
   @PrimaryKey
-  @Column(DataType.UUID)
+  @Default(DataType.UUIDV4)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
   user_id: string;
 
   @Column({

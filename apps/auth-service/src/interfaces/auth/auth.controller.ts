@@ -1,45 +1,63 @@
-import { AuthService } from "./auth.service";
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { AuthService } from '../../modules/auth/auth.service';
 
-const authService = new AuthService();
-
+@Controller('auth') // <-- important
 export class AuthController {
-  async sendOtp(req: any, res: any) {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('send-otp')
+  async sendOtp(
+    @Body() body: { email: string; purpose: 'reset_password' | 'signup' },
+  ) {
     try {
-      const { email, purpose } = req.body;
+      const { email, purpose } = body;
 
       const result =
-        purpose === "reset_password"
-          ? await authService.sendResetPasswordOtp(email)
-          : await authService.sendSignupOtp(email);
+        purpose === 'reset_password'
+          ? await this.authService.sendResetPasswordOtp(email)
+          : await this.authService.sendSignupOtp(email);
 
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
+      return { success: true, data: result };
     } catch (err: any) {
-      res.status(400).json({
-        success: false,
-        message: err.message,
-      });
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async verifyOtp(req: any, res: any) {
+  @Post('verify-otp')
+  async verifyOtp(
+    @Body() body: { email: string; otp: string; purpose: 'reset_password' | 'signup' },
+  ) {
     try {
-      const { email, otp, purpose } = req.body;
+      const { email, otp, purpose } = body;
 
-      if (purpose === "reset_password") {
-        await authService.verifyResetPasswordOtp(email, otp);
+      if (purpose === 'reset_password') {
+        await this.authService.verifyResetPasswordOtp(email, otp);
       } else {
-        await authService.verifySignupOtp(email, otp);
+        await this.authService.verifySignupOtp(email, otp);
       }
 
-      res.status(200).json({ success: true });
+      return { success: true };
     } catch (err: any) {
-      res.status(400).json({
-        success: false,
-        message: err.message,
-      });
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('register')
+  async register(
+    @Body() body: { email: string; password: string },
+  ) {
+    try {
+      const { email, password } = body;
+      const result = await this.authService.register(email, password);
+      return { success: true, data: result };
+    } catch (err: any) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

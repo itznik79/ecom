@@ -11,7 +11,7 @@ export class AuthService {
     private readonly otpService: OtpService,
     private readonly mailService: MailService,
     private readonly passwordService: PasswordService,
-  ) {}
+  ) { }
 
   async sendOtp(email: string, purpose: OtpPurpose) {
     if (!email) {
@@ -46,61 +46,64 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
-  if (!email) {
-    throw new BadRequestException("Email is required");
+    if (!email) {
+      throw new BadRequestException("Email is required");
+    }
+
+    const { otp, expiresIn } =
+      await this.otpService.generateAndStore("reset_password", email);
+
+    await this.mailService.sendOtpMail(email, otp, "reset_password");
+
+    return {
+      message: "Password reset OTP sent",
+      expiresIn,
+    };
   }
 
-  const { otp, expiresIn } =
-    await this.otpService.generateAndStore("reset_password", email);
+  async verifyForgotOtp(email: string, otp: string) {
+    if (!email || !otp) {
+      throw new BadRequestException("Email and OTP are required");
+    }
 
-  await this.mailService.sendOtpMail(email, otp, "reset_password");
+    await this.otpService.verify("reset_password", email, otp);
 
-  return {
-    message: "Password reset OTP sent",
-    expiresIn,
-  };
-}
+    await this.otpService.allowPasswordReset(email);
 
-async verifyForgotOtp(email: string, otp: string) {
-  if (!email || !otp) {
-    throw new BadRequestException("Email and OTP are required");
+    return {
+      message: "OTP verified. You can reset password now",
+    };
   }
 
-  await this.otpService.verify("reset_password", email, otp);
+  async resetPassword(email: string, newPassword: string) {
+    if (!email || !newPassword) {
+      throw new BadRequestException("Invalid request");
+    }
 
-  await this.otpService.allowPasswordReset(email);
+    const allowed =
+      await this.otpService.isPasswordResetAllowed(email);
 
-  return {
-    message: "OTP verified. You can reset password now",
-  };
-}
+    if (!allowed) {
+      throw new BadRequestException("Reset password not allowed");
+    }
 
-async resetPassword(email: string, newPassword: string) {
-  if (!email || !newPassword) {
-    throw new BadRequestException("Invalid request");
+    const hashedPassword =
+      await this.passwordService.hashPassword(newPassword);
+
+    // 👉 YAHAN TUM DB UPDATE KAROGE
+    // user.password = hash(newPassword)
+    // save user
+
+    await this.otpService.clearPasswordReset(email);
+
+    return {
+      message: "Password reset successfully",
+    };
   }
-
-  const allowed =
-    await this.otpService.isPasswordResetAllowed(email);
-
-  if (!allowed) {
-    throw new BadRequestException("Reset password not allowed");
+  async register(email: string, password: string) {
+    // your DB logic here
+    return { user_id: 'generated-uuid-here' };
   }
-
-  const hashedPassword =
-    await this.passwordService.hashPassword(newPassword);
-
-  // 👉 YAHAN TUM DB UPDATE KAROGE
-  // user.password = hash(newPassword)
-  // save user
-
-  await this.otpService.clearPasswordReset(email);
-
-  return {
-    message: "Password reset successfully",
-  };
-}
-
 }
 
 
