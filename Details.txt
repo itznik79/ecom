@@ -1,0 +1,9 @@
+Auth Service 
+    Purpose: Authentication, Credentials, Token
+    Owns: Login Security only
+    Does Not Own: Profile, roles, permissions
+
+    Registration:- 
+                    Name-
+                    Email-
+	
