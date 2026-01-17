@@ -1,14 +1,25 @@
 import { Sequelize } from 'sequelize-typescript';
 import 'dotenv/config';
-import path from 'path';
+import { UserCredential } from './models/user-credential-model';
+import { RefreshToken } from './models/refresh-token-model';
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
   username: process.env.DB_USER,
-  password: String(process.env.DB_PASSWORD || 'postgres'),
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  logging: false,
-  models: [path.join(__dirname, '../../**/*.model.{ts,js}')],
+  logging: process.env.NODE_ENV === 'development',
+  models: [UserCredential, RefreshToken],
 });
+
+export async function connectDatabase() {
+  try {
+    await sequelize.authenticate();
+    console.log('Postgres connected successfully');
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+}

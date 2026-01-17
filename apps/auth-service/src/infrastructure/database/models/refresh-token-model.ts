@@ -1,5 +1,11 @@
-import {Table, Column, Model, DataType, PrimaryKey} from 'sequelize-typescript';
-import { IRefreshToken } from '../../../interfaces/token.interface';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  Default,
+} from 'sequelize-typescript';
 
 @Table({
   tableName: 'refresh_tokens',
@@ -7,11 +13,9 @@ import { IRefreshToken } from '../../../interfaces/token.interface';
   underscored: true,
   updatedAt: false,
 })
-export class RefreshToken
-  extends Model<RefreshToken>
-  implements IRefreshToken
-{
+export class RefreshToken extends Model<RefreshToken> {
   @PrimaryKey
+  @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
   id: string;
 
