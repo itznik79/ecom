@@ -1,33 +1,42 @@
 import 'dotenv/config';
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { createSequelizeConnection } from './infrastructure/database/sequelize';
+import { setupSwagger } from './infrastructure/swagger/swagger.setup';
+import { winstonLogger } from './infrastructure/database/logger/winston.logger';
+import { seedSuperAdmin } from "./infrastructure/seeders/super-admin.seeder";
 
 async function bootstrap() {
-  // TEMP debug (remove later)
-  console.log('DB_HOST:', process.env.DB_HOST);
-  console.log('DB_PORT:', process.env.DB_PORT);
-  console.log('DB_USER:', process.env.DB_USER);
-  console.log('DB_NAME:', process.env.DB_NAME);
-
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+  app.useLogger(winstonLogger);
+  setupSwagger(app);
   const sequelize = createSequelizeConnection({
     host: process.env.DB_HOST!,
     port: Number(process.env.DB_PORT),
     username: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
-    database: process.env.DB_NAME!, // user_db
+    database: process.env.DB_NAME!,
   });
-
-  // CONNECT DB FIRST
+  winstonLogger.log(`Connecting to DB: ${process.env.DB_NAME}`);
   await sequelize.authenticate();
-  console.log('User DB connected');
+  winstonLogger.log('User DB connected');
 
-  // START SERVER
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3002);
+  if (process.env.RUN_SEEDERS === "true") {
+  winstonLogger.log("Running DB seeders...");
 
-  console.log('User service running on port 3002');
+  await seedSuperAdmin();
+
+  winstonLogger.log("Seeders completed successfully");
+}
+
+  const port = Number(process.env.PORT) || 3002;
+  await app.listen(port);
+
+  winstonLogger.log(
+    `${process.env.SERVICE_NAME || 'user-service'} running on port ${port}`,
+  );
 }
 
 bootstrap();

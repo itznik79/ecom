@@ -7,25 +7,27 @@ import {
   Default,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
+import { IRole } from '../../../interfaces/role.interface';
 
-interface PermissionAttributes {
+interface RoleAttributes {
   id: string;
-  key: string;
+  name: string;
   description?: string;
+  created_at?: Date;
 }
 
-interface PermissionCreationAttributes
-  extends Optional<PermissionAttributes, 'id'> {}
+interface RoleCreationAttributes
+  extends Optional<RoleAttributes, 'id' | 'description' | 'created_at'> {}
 
 @Table({
-  tableName: 'permissions',
+  tableName: 'roles',
   timestamps: false,
   underscored: true,
 })
-export class Permission extends Model<
-  PermissionAttributes,
-  PermissionCreationAttributes
-> {
+export class Role
+  extends Model<RoleAttributes, RoleCreationAttributes>
+  implements IRole
+{
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
@@ -36,8 +38,10 @@ export class Permission extends Model<
     unique: true,
     allowNull: false,
   })
-  declare key: string;
+  declare name: string;
 
   @Column(DataType.STRING)
   declare description?: string;
+
+  declare created_at?: Date;
 }

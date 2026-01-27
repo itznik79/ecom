@@ -2,7 +2,7 @@ import { AuthProviderType } from './enums/auth-provider.enum';
 
 export interface IRegisterPayload {
   email: string;
-  password?: string; // optional for OAuth
+  password?: string;
   provider: AuthProviderType;
   provider_id?: string;
 }

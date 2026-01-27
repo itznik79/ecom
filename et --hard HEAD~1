@@ -1,0 +1,145 @@
+[33mcommit 57144a89acb8d875942af71c22e9a7c8584cdd35[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/dev[m[33m, [m[1;32mfeat/oauth2[m[33m)[m
+Merge: b04b70a e8f1873
+Author: Nikhil Gautam <158430763+itznik79@users.noreply.github.com>
+Date:   Thu Jan 15 15:31:31 2026 +0530
+
+    Merge pull request #7 from itznik79/feat/auth-token
+    
+    Feat/auth token
+
+[33mcommit e8f18734b18065f7c2733e78661ee0a99e28102a[m
+Merge: 8e3fa41 b04b70a
+Author: Anish Bhandari <anishbca2020@gmail.com>
+Date:   Thu Jan 15 14:01:06 2026 +0530
+
+    Merge branch 'dev' of https://github.com/itznik79/ecom into feat/auth-token
+
+[33mcommit 8e3fa411177d9c3b7e96f7a2f354480206c8246e[m
+Author: Anish Bhandari <anishbca2020@gmail.com>
+Date:   Wed Jan 14 23:16:11 2026 +0530
+
+    created registration api
+
+[33mcommit b04b70a8b7544640a2fa32b80b2f784547092d9e[m
+Merge: 8ef1932 5308090
+Author: Shivam Singh <sin2000shiv@gmail.com>
+Date:   Tue Jan 13 23:52:27 2026 +0530
+
+    Merge pull request #5 from itznik79/feature/auth-otp-redis
+    
+    Add OTP auth with Redis setup, send-otp, verify-otp, forgot-password,…
+
+[33mcommit 5308090c6d446d0a9510c40347c256f7538e68a8[m
+Merge: 6820412 8ef1932
+Author: Shivam Singh <sin2000shiv@gmail.com>
+Date:   Tue Jan 13 23:51:52 2026 +0530
+
+    Merge branch 'dev' into feature/auth-otp-redis
+
+[33mcommit 6820412e663c42dee9937f9e61c71ba0705dfc31[m
+Author: ShivamSingh <sin2000shiv@gmail.com>
+Date:   Tue Jan 13 23:47:39 2026 +0530
+
+    Add OTP auth with Redis setup, send-otp, verify-otp, forgot-password, verify-forgot-otp, reset-password
+
+[33mcommit 8ef1932fd97aca33d84b459cf327f5be6e92dab3[m
+Merge: c007974 7a3169b
+Author: Shivam Singh <sin2000shiv@gmail.com>
+Date:   Sat Jan 10 15:47:28 2026 +0530
+
+    Merge pull request #4 from itznik79/featured/role-and-permission
+    
+    Role and Permission Table
+
+[33mcommit 7a3169b66fcb57f8908194793261fe1eb1276186[m
+Author: ShivamSingh <sin2000shiv@gmail.com>
+Date:   Sat Jan 10 15:40:55 2026 +0530
+
+    Role and Permission Table
+
+[33mcommit c007974bd5552dfb596fc92b58e986a7e14ca9b0[m
+Merge: 54e1d01 46b0dad
+Author: Shivam Singh <sin2000shiv@gmail.com>
+Date:   Sat Jan 10 11:12:04 2026 +0530
+
+    Merge pull request #3 from itznik79/feature/auth-otp-redis
+    
+    Redis Connection, OTP Generate-Store-Verify, Nodemailer Setup
+
+[33mcommit 46b0dada7977a017a580b324a79ee32037cea078[m
+Author: ShivamSingh <sin2000shiv@gmail.com>
+Date:   Sat Jan 10 11:09:53 2026 +0530
+
+    Redis Connection, OTP Generate-Store-Verify, Nodemailer Setup
+
+[33mcommit 54e1d01277bbf7b57d0e4267446185a61435be63[m
+Merge: cd836a9 ce200f4
+Author: Nikhil Gautam <158430763+itznik79@users.noreply.github.com>
+Date:   Fri Jan 9 16:13:48 2026 +0530
+
+    Merge pull request #2 from itznik79/feat/auth
+    
+    Created basic structure for auth
+
+[33mcommit ce200f422b567363af73c2e3792419379c5e5a39[m[33m ([m[1;31morigin/feat/auth[m[33m, [m[1;32mfeat/auth[m[33m)[m
+Author: itznik79 <nikhilkgautam97@gmail.com>
+Date:   Fri Jan 9 16:11:50 2026 +0530
+
+    done by anish
+
+[33mcommit cd836a981b44b5360a25161f65932d36178ebb09[m
+Author: itznik79 <nikhilkgautam97@gmail.com>
+Date:   Fri Jan 9 15:10:26 2026 +0530
+
+    added swagger and winston in auth and user service
+
+[33mcommit 6f425b3910feb00346489e7756a65867408a7b66[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: itznik79 <nikhilkgautam97@gmail.com>
+Date:   Fri Jan 9 11:39:09 2026 +0530
+
+    added models in auth and user service with basic fields using migration
+
+[33mcommit 6f1aa565902209c85cb3eebfa3fe4ce041828cd5[m
+Merge: d28bbf4 7b2ce5f
+Author: Shivam Singh <sin2000shiv@gmail.com>
+Date:   Fri Jan 9 00:25:51 2026 +0530
+
+    Merge pull request #1 from singhshivam75/feat/auth-db-migrations
+    
+    feat(auth,user): add auth DB migrations and RBAC user schemaFeat/auth db migrations
+
+[33mcommit 7b2ce5f71f1ee48eb6b52d638c3e3f4c80da1f95[m
+Author: ShivamSingh <sin2000shiv@gmail.com>
+Date:   Thu Jan 8 23:47:27 2026 +0530
+
+    feat(user): add RBAC schema and migrations
+
+[33mcommit 93eb082b3a8f57846432ad041ae4c9e9a067ef51[m
+Author: ShivamSingh <sin2000shiv@gmail.com>
+Date:   Thu Jan 8 23:31:05 2026 +0530
+
+    feat(user): add RBAC schema and migrations
+
+[33mcommit ee8bf3c024bd23813d253ad6f92115516b6b470f[m
+Author: ShivamSingh <sin2000shiv@gmail.com>
+Date:   Thu Jan 8 22:56:45 2026 +0530
+
+    feat(auth): add sequelize migrations and postgres config
+
+[33mcommit d28bbf453f6b3440b22029a4dbe783192c16a933[m
+Author: itznik79 <nikhilkgautam97@gmail.com>
+Date:   Thu Jan 8 20:20:56 2026 +0530
+
+    added db connection in user-service
+
+[33mcommit 2c14e4ece5964b7be245bb736c007b0ffcd635c7[m
+Author: itznik79 <nikhilkgautam97@gmail.com>
+Date:   Thu Jan 8 18:05:11 2026 +0530
+
+    db connection in auth-service
+
+[33mcommit 737161e28a5d670990ac2a24efee6beab0c2e00e[m
+Author: itznik79 <nikhilkgautam97@gmail.com>
+Date:   Tue Jan 6 20:57:30 2026 +0530
+
+    first commit: added auth and user module folder structure

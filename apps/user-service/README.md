@@ -1,98 +1,145 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User Service (RBAC Domain)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The **User Service** is responsible for managing user identity, profiles, roles, and permissions in an RBAC (Role-Based Access Control) model.  
+This service does **not** manage passwords, login, or tokens — those are handled by the Auth Service.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This follows **DDD principles**, separating authentication from user domain & authorization logic.
 
-## Description
+## Overview
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The User Service models the **identity domain** in an e-commerce system:
 
-## Project setup
+- Manages user accounts & providers (local, Google, GitHub, etc.)
+- Stores user profile and address information
+- Supports RBAC (Roles & Permissions)
+- Acts as the authorization source for API Gateway & other services
 
-```bash
-$ npm install
-```
+This allows dynamic access control to features like:
 
-## Compile and run the project
+- Admin dashboards
+- Seller features
+- Buyer/user permissions
+- Order, product, inventory management, etc.
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## Features
 
-# production mode
-$ npm run start:prod
-```
+- **Canonical user identity root**
+- **User profile management**
+- **User addresses (multi-address support)**
+- **Role-based access control (RBAC)**
+- **Permission-based access granularity**
+- **Many-to-many role-permission mapping**
+- **Many-to-many user-role assignment**
+- **OAuth provider support (Google/GitHub)**
+- **DDD-aligned domain separation**
+- **Microservice ready**
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+## Domain Entities (DDD)
 
-# e2e tests
-$ npm run test:e2e
+This service contains the following core entities:
 
-# test coverage
-$ npm run test:cov
-```
+| Entity | Description |
+|---|---|
+| `User` | Identity root (email, provider, status) |
+| `UserProfile` | Personal profile fields |
+| `UserAddress` | Multiple addresses per user |
+| `Role` | High-level access grouping (ADMIN/USER/SELLER) |
+| `Permission` | Atomic access actions (order.create, product.update) |
+| `UserRoles` | User ↔ Role mapping |
+| `RolePermissions` | Role ↔ Permission mapping |
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Database Schema
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### **users**
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Canonical user identity.
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+| Column | Type |
+|---|---|
+| id | uuid (pk) |
+| email | varchar(unique) |
+| provider | varchar(local/google/github) |
+| provider_id | varchar |
+| is_active | boolean |
+| created_at | timestamp |
+| updated_at | timestamp |
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+### **user_profiles**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Optional personal info.
 
-## Support
+| Column | Type |
+|---|---|
+| id | uuid (pk) |
+| user_id | uuid (fk unique) |
+| first_name | varchar |
+| last_name | varchar |
+| phone | varchar(unique) |
+| avatar_url | varchar |
+| dob | date |
+| created_at | timestamp |
+| updated_at | timestamp |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+### **user_addresses**
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Multiple addresses per user.
 
-## License
+| Column | Type |
+|---|---|
+| id | uuid (pk) |
+| user_id | uuid (fk) |
+| type | varchar(home/office/billing) |
+| address_line1 | varchar |
+| address_line2 | varchar |
+| city | varchar |
+| state | varchar |
+| country | varchar |
+| postal_code | varchar |
+| is_default | boolean |
+| created_at | timestamp |
+| updated_at | timestamp |
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+### **roles**
+
+High-level access groups.
+
+| Column | Type |
+|---|---|
+| id | uuid (pk) |
+| name | varchar(unique) |
+| description | varchar |
+| created_at | timestamp |
+
+---
+
+### **permissions**
+
+Granular access rules.
+
+| Column | Type |
+|---|---|
+| id | uuid (pk) |
+| key | varchar(unique) |
+| description | varchar |
+| created_at | timestamp |
+
+---
+
+### **user_roles** *(Many-to-Many)*
+
+> A user can have many roles.
+
+Composite Primary Key:
+
