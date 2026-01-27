@@ -1,21 +1,21 @@
-import { Table, Column, Model, DataType, PrimaryKey,Default } from 'sequelize-typescript';
-import { IUserCredential } from '../../../interfaces/user-credential.interface';
-import { AuthProviderType } from '../../../interfaces/enums/auth-provider.enum';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  Default,
+} from 'sequelize-typescript';
 
 @Table({
   tableName: 'user_credentials',
   timestamps: true,
   underscored: true,
 })
-export class UserCredential
-  extends Model<UserCredential>
-  implements IUserCredential {
+export class UserCredential extends Model<UserCredential> {
   @PrimaryKey
   @Default(DataType.UUIDV4)
-  @Column({
-    type: DataType.UUID,
-    allowNull: false,
-  })
+  @Column(DataType.UUID)
   user_id: string;
 
   @Column({
@@ -32,7 +32,7 @@ export class UserCredential
     type: DataType.STRING,
     allowNull: false,
   })
-  provider: AuthProviderType;
+  provider: string;
 
   @Column(DataType.STRING)
   provider_id?: string;
