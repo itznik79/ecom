@@ -2,6 +2,9 @@ import { Sequelize } from 'sequelize-typescript';
 import 'dotenv/config';
 import { UserCredential } from './models/user-credential-model';
 import { RefreshToken } from './models/refresh-token-model';
+import { Logger } from '@nestjs/common';
+
+const logger = new Logger('Sequelize');
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',
@@ -10,16 +13,16 @@ export const sequelize = new Sequelize({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  logging: process.env.NODE_ENV === 'development',
+  logging: (msg) => logger.debug(msg),
   models: [UserCredential, RefreshToken],
 });
 
 export async function connectDatabase() {
   try {
     await sequelize.authenticate();
-    console.log('Postgres connected successfully');
+    logger.log('Postgres connected successfully');
   } catch (error) {
-    console.error(error);
+    logger.error('Unable to connect to the database', error);
     process.exit(1);
   }
 }

@@ -4,7 +4,9 @@ import { AppModule } from './app.module';
 import { connectDatabase } from './infrastructure/database/sequelize';
 import { connectRedis } from './infrastructure/redis/redis.client';
 import { mailService } from './infrastructure/mail/mail.service';
-import 'dotenv/config';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import cookieParser from 'cookie-parser';
+
 
 async function bootstrap() {
   await connectDatabase();
@@ -12,9 +14,15 @@ async function bootstrap() {
   await mailService.verifyConnection();
 
   const app = await NestFactory.create(AppModule);
-  await app.listen(3001);
+  app.useGlobalInterceptors(new ResponseInterceptor());
+  app.use(cookieParser());
 
-  console.log('Auth service running on port 3001');
+  // Enable CORS if needed, or other global settings
+
+  const port = process.env.APP_PORT || 3001;
+  await app.listen(port);
+
+  console.log(`Auth service running on port ${port}`);
 }
 
 bootstrap();

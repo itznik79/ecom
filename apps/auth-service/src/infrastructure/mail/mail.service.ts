@@ -1,8 +1,10 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import 'dotenv/config';
+import { Logger } from '@nestjs/common';
 
 class MailService {
   private transporter: Transporter;
+  private readonly logger = new Logger(MailService.name);
 
   constructor() {
     this.transporter = nodemailer.createTransport({
@@ -13,15 +15,17 @@ class MailService {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
       },
+      logger: true, // Enable nodemailer internal logging
+      debug: false,
     });
   }
 
   async verifyConnection() {
     try {
       await this.transporter.verify();
-      console.log('Mail server connected successfully');
+      this.logger.log('Mail server connected successfully');
     } catch (error) {
-      console.error('Mail server connection failed', error);
+      this.logger.error('Mail server connection failed', error);
       process.exit(1);
     }
   }
@@ -31,12 +35,18 @@ class MailService {
     subject: string,
     html: string,
   ): Promise<void> {
-    await this.transporter.sendMail({
-      from: process.env.MAIL_FROM,
-      to,
-      subject,
-      html,
-    });
+    try {
+      await this.transporter.sendMail({
+        from: process.env.MAIL_FROM,
+        to,
+        subject,
+        html,
+      });
+      this.logger.log(`Email sent to ${to}: ${subject}`);
+    } catch (error) {
+      this.logger.error(`Failed to send email to ${to}`, error);
+      throw error;
+    }
   }
 }
 

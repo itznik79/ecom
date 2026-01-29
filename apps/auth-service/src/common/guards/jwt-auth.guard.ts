@@ -6,6 +6,7 @@ import {
 import jwt from 'jsonwebtoken';
 import { jwtConfig } from '../config/jwt.config';
 import { isAccessTokenValid } from '../utils/access-token-redis.util';
+import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -18,9 +19,9 @@ export class JwtAuthGuard implements CanActivate {
 
     const token = authHeader.replace('Bearer ', '');
 
-    let payload: any;
+    let payload: JwtPayload;
     try {
-      payload = jwt.verify(token, jwtConfig.accessToken.secret);
+      payload = jwt.verify(token, jwtConfig.accessToken.secret) as JwtPayload;
     } catch {
       throw new UnauthorizedException('Invalid token');
     }

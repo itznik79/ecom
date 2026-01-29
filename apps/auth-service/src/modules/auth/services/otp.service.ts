@@ -1,6 +1,7 @@
 import { mailService } from '../../../infrastructure/mail/mail.service';
 import { generateOtp } from '../../../common/utils/otp.util';
 import { saveOtp } from '../../../common/utils/otp-redis.util';
+import { getVerificationEmailTemplate, getForgotPasswordEmailTemplate } from '../templates/email.templates';
 
 export async function sendRegisterOtp(email: string) {
   const otp = generateOtp();
@@ -11,11 +12,19 @@ export async function sendRegisterOtp(email: string) {
   await mailService.sendMail(
     email,
     'Verify your email',
-    `
-      <h2>Email Verification</h2>
-      <p>Your OTP is:</p>
-      <h1>${otp}</h1>
-      <p>This OTP will expire in 5 minutes.</p>
-    `,
+    getVerificationEmailTemplate(otp),
+  );
+}
+
+export async function sendForgotPasswordOtp(email: string) {
+  const otp = generateOtp();
+  const redisKey = `otp:forgot_password:${email}`;
+
+  await saveOtp(redisKey, otp);
+
+  await mailService.sendMail(
+    email,
+    'Reset Password',
+    getForgotPasswordEmailTemplate(otp),
   );
 }
